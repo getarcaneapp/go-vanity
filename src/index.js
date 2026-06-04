@@ -7,6 +7,11 @@ const MODULES = {
   types: { repoUrl: REPO_URL, subdir: 'types' },
 };
 
+const GO_GET_RESPONSE_HEADERS = {
+  'Content-Type': 'text/html; charset=utf-8',
+  'Cache-Control': 'no-transform',
+};
+
 function getModuleRequest(pathname) {
   const [, moduleName, ...subpathSegments] = pathname.split('/');
 
@@ -49,7 +54,7 @@ export default {
     // Go toolchain request — serve the go-import meta tag
     if (searchParams.get('go-get') === '1') {
       return new Response(buildGoImportMeta(hostname, moduleName, module), {
-        headers: { 'Content-Type': 'text/html; charset=utf-8' },
+        headers: GO_GET_RESPONSE_HEADERS,
       });
     }
 

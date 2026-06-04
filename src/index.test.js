@@ -75,6 +75,11 @@ describe('go-get request', () => {
     expect(res.headers.get('Content-Type')).toBe('text/html; charset=utf-8');
   });
 
+  test('Cache-Control disables downstream HTML transformations', async () => {
+    const res = await request('/arcane?go-get=1');
+    expect(res.headers.get('Cache-Control')).toBe('no-transform');
+  });
+
   for (const moduleName of Object.keys(MODULES)) {
     test(`contains go-import meta tag with correct content for ${moduleName}`, async () => {
       const res = await request(`/${moduleName}?go-get=1`);
