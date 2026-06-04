@@ -1,27 +1,58 @@
+const REPO_URL = 'https://github.com/getarcaneapp/arcane';
+const DEFAULT_BRANCH = 'main';
+
 const MODULES = {
-  sg: 'https://github.com/ofkm/sg',
-  code: 'https://github.com/ofkm/code',
-  gaze: 'https://github.com/ofkm/go-gaze',
+  arcane: { repoUrl: REPO_URL, subdir: 'backend' },
+  cli: { repoUrl: REPO_URL, subdir: 'cli' },
+  types: { repoUrl: REPO_URL, subdir: 'types' },
 };
+
+function getModuleRequest(pathname) {
+  const [, moduleName, ...subpathSegments] = pathname.split('/');
+
+  if (!moduleName || !Object.hasOwn(MODULES, moduleName)) {
+    return null;
+  }
+
+  const module = MODULES[moduleName];
+
+  return {
+    moduleName,
+    module,
+    subpathSegments: subpathSegments.filter(Boolean),
+  };
+}
+
+function buildGoImportMeta(hostname, moduleName, { repoUrl, subdir }) {
+  const metaContent = [`${hostname}/${moduleName}`, 'git', repoUrl, subdir].filter(Boolean).join(' ');
+
+  return `<!DOCTYPE html><meta name="go-import" content="${metaContent}">`;
+}
+
+function buildRedirectUrl({ repoUrl, subdir }, subpathSegments) {
+  const redirectPath = [subdir, ...subpathSegments].filter(Boolean).join('/');
+
+  return `${repoUrl}/tree/${DEFAULT_BRANCH}/${redirectPath}`;
+}
 
 export default {
   async fetch(request) {
     const { hostname, pathname, searchParams } = new URL(request.url);
-    const moduleName = pathname.split('/')[1];
+    const moduleRequest = getModuleRequest(pathname);
 
-    if (!moduleName || !Object.hasOwn(MODULES, moduleName)) {
+    if (!moduleRequest) {
       return new Response('Not Found', { status: 404 });
     }
 
-    const repoUrl = MODULES[moduleName];
+    const { moduleName, module, subpathSegments } = moduleRequest;
 
     // Go toolchain request — serve the go-import meta tag
     if (searchParams.get('go-get') === '1') {
-      return new Response(`<!DOCTYPE html><meta name="go-import" content="${hostname}/${moduleName} git ${repoUrl}">`, {
+      return new Response(buildGoImportMeta(hostname, moduleName, module), {
         headers: { 'Content-Type': 'text/html; charset=utf-8' },
       });
     }
 
-    return Response.redirect(repoUrl, 302);
+    return Response.redirect(buildRedirectUrl(module, subpathSegments), 302);
   },
 };
