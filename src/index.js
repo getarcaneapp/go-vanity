@@ -1,19 +1,22 @@
-const REPO_URL = 'https://github.com/getarcaneapp/arcane';
-const DEFAULT_BRANCH = 'main';
+const REPO_URL = "https://github.com/getarcaneapp/arcane";
+const DEFAULT_BRANCH = "main";
+
+const UPDATER_REPO_URL = "https://github.com/getarcaneapp/updater";
 
 const MODULES = {
-  arcane: { repoUrl: REPO_URL, subdir: 'backend' },
-  cli: { repoUrl: REPO_URL, subdir: 'cli' },
-  types: { repoUrl: REPO_URL, subdir: 'types' },
+  arcane: { repoUrl: REPO_URL, subdir: "backend" },
+  cli: { repoUrl: REPO_URL, subdir: "cli" },
+  types: { repoUrl: REPO_URL, subdir: "types" },
+  updater: { repoUrl: UPDATER_REPO_URL },
 };
 
 const GO_GET_RESPONSE_HEADERS = {
-  'Content-Type': 'text/html; charset=utf-8',
-  'Cache-Control': 'no-transform',
+  "Content-Type": "text/html; charset=utf-8",
+  "Cache-Control": "no-transform",
 };
 
 function getModuleRequest(pathname) {
-  const [, moduleName, ...subpathSegments] = pathname.split('/');
+  const [, moduleName, ...subpathSegments] = pathname.split("/");
 
   if (!moduleName || !Object.hasOwn(MODULES, moduleName)) {
     return null;
@@ -29,13 +32,13 @@ function getModuleRequest(pathname) {
 }
 
 function buildGoImportMeta(hostname, moduleName, { repoUrl, subdir }) {
-  const metaContent = [`${hostname}/${moduleName}`, 'git', repoUrl, subdir].filter(Boolean).join(' ');
+  const metaContent = [`${hostname}/${moduleName}`, "git", repoUrl, subdir].filter(Boolean).join(" ");
 
   return `<!DOCTYPE html><meta name="go-import" content="${metaContent}">`;
 }
 
 function buildRedirectUrl({ repoUrl, subdir }, subpathSegments) {
-  const redirectPath = [subdir, ...subpathSegments].filter(Boolean).join('/');
+  const redirectPath = [subdir, ...subpathSegments].filter(Boolean).join("/");
 
   return `${repoUrl}/tree/${DEFAULT_BRANCH}/${redirectPath}`;
 }
@@ -46,13 +49,13 @@ export default {
     const moduleRequest = getModuleRequest(pathname);
 
     if (!moduleRequest) {
-      return new Response('Not Found', { status: 404 });
+      return new Response("Not Found", { status: 404 });
     }
 
     const { moduleName, module, subpathSegments } = moduleRequest;
 
     // Go toolchain request — serve the go-import meta tag
-    if (searchParams.get('go-get') === '1') {
+    if (searchParams.get("go-get") === "1") {
       return new Response(buildGoImportMeta(hostname, moduleName, module), {
         headers: GO_GET_RESPONSE_HEADERS,
       });
