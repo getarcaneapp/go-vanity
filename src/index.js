@@ -2,12 +2,14 @@ const REPO_URL = "https://github.com/getarcaneapp/arcane";
 const DEFAULT_BRANCH = "main";
 
 const UPDATER_REPO_URL = "https://github.com/getarcaneapp/updater";
+const BUILDS_REPO_URL = "https://github.com/getarcaneapp/builds";
 
 const MODULES = {
   arcane: { repoUrl: REPO_URL, subdir: "backend" },
   cli: { repoUrl: REPO_URL, subdir: "cli" },
   types: { repoUrl: REPO_URL, subdir: "types" },
   updater: { repoUrl: UPDATER_REPO_URL },
+  builds: { repoUrl: BUILDS_REPO_URL },
 };
 
 const GO_GET_RESPONSE_HEADERS = {
