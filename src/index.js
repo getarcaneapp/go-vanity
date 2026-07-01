@@ -3,6 +3,7 @@ const DEFAULT_BRANCH = "main";
 
 const UPDATER_REPO_URL = "https://github.com/getarcaneapp/updater";
 const BUILDS_REPO_URL = "https://github.com/getarcaneapp/builds";
+const SYS_REPO_URL = "https://github.com/getarcaneapp/sys";
 
 const MODULES = {
   arcane: { repoUrl: REPO_URL, subdir: "backend" },
@@ -10,6 +11,8 @@ const MODULES = {
   types: { repoUrl: REPO_URL, subdir: "types" },
   updater: { repoUrl: UPDATER_REPO_URL },
   builds: { repoUrl: BUILDS_REPO_URL },
+  sys: { repoUrl: SYS_REPO_URL },
+  "sys/atomic": { repoUrl: SYS_REPO_URL, subdir: "atomic" },
 };
 
 const GO_GET_RESPONSE_HEADERS = {
@@ -18,19 +21,22 @@ const GO_GET_RESPONSE_HEADERS = {
 };
 
 function getModuleRequest(pathname) {
-  const [, moduleName, ...subpathSegments] = pathname.split("/");
+  const pathSegments = pathname.split("/").filter(Boolean);
 
-  if (!moduleName || !Object.hasOwn(MODULES, moduleName)) {
-    return null;
+  for (let segmentCount = pathSegments.length; segmentCount > 0; segmentCount--) {
+    const moduleName = pathSegments.slice(0, segmentCount).join("/");
+    if (!Object.hasOwn(MODULES, moduleName)) {
+      continue;
+    }
+
+    return {
+      moduleName,
+      module: MODULES[moduleName],
+      subpathSegments: pathSegments.slice(segmentCount),
+    };
   }
 
-  const module = MODULES[moduleName];
-
-  return {
-    moduleName,
-    module,
-    subpathSegments: subpathSegments.filter(Boolean),
-  };
+  return null;
 }
 
 function buildGoImportMeta(hostname, moduleName, { repoUrl, subdir }) {
