@@ -14,6 +14,7 @@ const MODULES = {
   sys: { repoUrl: SYS_REPO_URL },
   "sys/atomic": { repoUrl: SYS_REPO_URL, subdir: "atomic" },
   "sys/cgroup": { repoUrl: SYS_REPO_URL, subdir: "cgroup" },
+  "sys/crypto": { repoUrl: SYS_REPO_URL, subdir: "crypto" },
 };
 
 const GO_GET_RESPONSE_HEADERS = {
