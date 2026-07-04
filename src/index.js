@@ -13,6 +13,7 @@ const MODULES = {
   builds: { repoUrl: BUILDS_REPO_URL },
   sys: { repoUrl: SYS_REPO_URL },
   "sys/atomic": { repoUrl: SYS_REPO_URL, subdir: "atomic" },
+  "sys/cgroup": { repoUrl: SYS_REPO_URL, subdir: "cgroup" },
 };
 
 const GO_GET_RESPONSE_HEADERS = {
