@@ -4,6 +4,7 @@ const DEFAULT_BRANCH = "main";
 const UPDATER_REPO_URL = "https://github.com/getarcaneapp/updater";
 const BUILDS_REPO_URL = "https://github.com/getarcaneapp/builds";
 const SYS_REPO_URL = "https://github.com/getarcaneapp/sys";
+const DOCKER_REPO_URL = "https://github.com/getarcaneapp/docker";
 
 const MODULES = {
   arcane: { repoUrl: REPO_URL, subdir: "backend" },
@@ -15,6 +16,7 @@ const MODULES = {
   "sys/atomic": { repoUrl: SYS_REPO_URL, subdir: "atomic" },
   "sys/cgroup": { repoUrl: SYS_REPO_URL, subdir: "cgroup" },
   "sys/crypto": { repoUrl: SYS_REPO_URL, subdir: "crypto" },
+  "docker/convert": { repoUrl: DOCKER_REPO_URL, subdir: "convert" },
 };
 
 const GO_GET_RESPONSE_HEADERS = {
