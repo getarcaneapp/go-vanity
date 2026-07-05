@@ -7,7 +7,18 @@ const STREAMS_REPO_URL = "https://github.com/getarcaneapp/streams";
 const SYS_REPO_URL = "https://github.com/getarcaneapp/sys";
 const DOCKER_REPO_URL = "https://github.com/getarcaneapp/docker";
 
-const MODULES = {
+interface VanityModule {
+	repoUrl: string;
+	subdir?: string;
+}
+
+interface ModuleRequest {
+	moduleName: string;
+	module: VanityModule;
+	subpathSegments: string[];
+}
+
+const MODULES: Record<string, VanityModule> = {
 	arcane: { repoUrl: REPO_URL, subdir: "backend" },
 	cli: { repoUrl: REPO_URL, subdir: "cli" },
 	types: { repoUrl: REPO_URL, subdir: "types" },
@@ -24,9 +35,9 @@ const MODULES = {
 const GO_GET_RESPONSE_HEADERS = {
 	"Content-Type": "text/html; charset=utf-8",
 	"Cache-Control": "no-transform",
-};
+} satisfies HeadersInit;
 
-function getModuleRequest(pathname) {
+function getModuleRequest(pathname: string): ModuleRequest | null {
 	const pathSegments = pathname.split("/").filter(Boolean);
 
 	for (
@@ -49,7 +60,11 @@ function getModuleRequest(pathname) {
 	return null;
 }
 
-function buildGoImportMeta(hostname, moduleName, { repoUrl, subdir }) {
+function buildGoImportMeta(
+	hostname: string,
+	moduleName: string,
+	{ repoUrl, subdir }: VanityModule,
+): string {
 	const metaContent = [`${hostname}/${moduleName}`, "git", repoUrl, subdir]
 		.filter(Boolean)
 		.join(" ");
@@ -57,14 +72,17 @@ function buildGoImportMeta(hostname, moduleName, { repoUrl, subdir }) {
 	return `<!DOCTYPE html><meta name="go-import" content="${metaContent}">`;
 }
 
-function buildRedirectUrl({ repoUrl, subdir }, subpathSegments) {
+function buildRedirectUrl(
+	{ repoUrl, subdir }: VanityModule,
+	subpathSegments: string[],
+): string {
 	const redirectPath = [subdir, ...subpathSegments].filter(Boolean).join("/");
 
 	return `${repoUrl}/tree/${DEFAULT_BRANCH}/${redirectPath}`;
 }
 
 export default {
-	async fetch(request) {
+	async fetch(request: Request): Promise<Response> {
 		const { hostname, pathname, searchParams } = new URL(request.url);
 		const moduleRequest = getModuleRequest(pathname);
 

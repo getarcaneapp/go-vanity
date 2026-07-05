@@ -1,31 +1,35 @@
 import { describe, expect, test } from "bun:test";
-import worker from "./index.js";
+import worker from "./index";
 
 const TEST_DOMAIN = "go.carr.sh";
 const ARCANE_REPO_URL = "https://github.com/getarcaneapp/arcane";
 const STREAMS_REPO_URL = "https://github.com/getarcaneapp/streams";
-const MODULES = {
+
+interface TestModule {
+	repoUrl: string;
+	subdir?: string;
+}
+
+const MODULES: Record<string, TestModule> = {
 	arcane: { repoUrl: ARCANE_REPO_URL, subdir: "backend" },
 	cli: { repoUrl: ARCANE_REPO_URL, subdir: "cli" },
 	streams: { repoUrl: STREAMS_REPO_URL },
 	types: { repoUrl: ARCANE_REPO_URL, subdir: "types" },
 };
 
-/**
- * Helper to invoke the worker's fetch handler.
- * @param {string} path - URL path (e.g. "/litmus" or "/litmus?go-get=1")
- * @returns {Promise<Response>}
- */
-function request(path) {
+function request(path: string): Promise<Response> {
 	return worker.fetch(new Request(`https://${TEST_DOMAIN}${path}`));
 }
 
-function expectedGoImport(hostname, moduleName) {
+function expectedGoImport(hostname: string, moduleName: string): string {
 	const module = MODULES[moduleName];
 	return `<meta name="go-import" content="${[`${hostname}/${moduleName}`, "git", module.repoUrl, module.subdir].filter(Boolean).join(" ")}">`;
 }
 
-function expectedRedirect(moduleName, ...subpathSegments) {
+function expectedRedirect(
+	moduleName: string,
+	...subpathSegments: string[]
+): string {
 	const module = MODULES[moduleName];
 	const path = [module.subdir, ...subpathSegments].filter(Boolean).join("/");
 	return `${module.repoUrl}/tree/main/${path}`;
