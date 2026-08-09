@@ -6,6 +6,7 @@ const BUILDS_REPO_URL = "https://github.com/getarcaneapp/builds";
 const STREAMS_REPO_URL = "https://github.com/getarcaneapp/streams";
 const SYS_REPO_URL = "https://github.com/getarcaneapp/sys";
 const DOCKER_REPO_URL = "https://github.com/getarcaneapp/docker";
+const ACFS_REPO_URL = "https://github.com/getarcaneapp/acfs";
 
 interface VanityModule {
 	repoUrl: string;
@@ -31,6 +32,7 @@ const MODULES: Record<string, VanityModule> = {
 	"sys/crypto": { repoUrl: SYS_REPO_URL, subdir: "crypto" },
 	"sys/bytes": { repoUrl: SYS_REPO_URL, subdir: "bytes" },
 	"docker/convert": { repoUrl: DOCKER_REPO_URL, subdir: "convert" },
+	acfs: { repoUrl: ACFS_REPO_URL },
 };
 
 const GO_GET_RESPONSE_HEADERS = {
