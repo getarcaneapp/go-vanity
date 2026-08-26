@@ -1,12 +1,7 @@
 const REPO_URL = "https://github.com/getarcaneapp/arcane";
 const DEFAULT_BRANCH = "main";
 
-const UPDATER_REPO_URL = "https://github.com/getarcaneapp/updater";
-const BUILDS_REPO_URL = "https://github.com/getarcaneapp/builds";
-const STREAMS_REPO_URL = "https://github.com/getarcaneapp/streams";
 const SYS_REPO_URL = "https://github.com/getarcaneapp/sys";
-const DOCKER_REPO_URL = "https://github.com/getarcaneapp/docker";
-const ACFS_REPO_URL = "https://github.com/getarcaneapp/acfs";
 const KIT_REPO_URL = "https://github.com/getarcaneapp/kit";
 
 interface VanityModule {
@@ -21,20 +16,22 @@ interface ModuleRequest {
 }
 
 const MODULES: Record<string, VanityModule> = {
+	kit: { repoUrl: KIT_REPO_URL },
+	acfs: { repoUrl: KIT_REPO_URL, subdir: "acfs" },
+	builds: { repoUrl: KIT_REPO_URL, subdir: "builds" },
+	updater: { repoUrl: KIT_REPO_URL, subdir: "updater" },
+	streams: { repoUrl: KIT_REPO_URL, subdir: "streams" },
+	"sys/bytes": { repoUrl: KIT_REPO_URL, subdir: "sys/bytes" },
+	"sys/cgroup": { repoUrl: KIT_REPO_URL, subdir: "sys/cgroup" },
+	"sys/crypto": { repoUrl: KIT_REPO_URL, subdir: "sys/crypto" },
+	"docker/convert": { repoUrl: KIT_REPO_URL, subdir: "docker/convert" },
+
+	// Remove eventually 
+	"sys/atomic": { repoUrl: SYS_REPO_URL, subdir: "atomic" },
+
 	arcane: { repoUrl: REPO_URL, subdir: "backend" },
 	cli: { repoUrl: REPO_URL, subdir: "cli" },
 	types: { repoUrl: REPO_URL, subdir: "types" },
-	updater: { repoUrl: UPDATER_REPO_URL },
-	builds: { repoUrl: BUILDS_REPO_URL },
-	streams: { repoUrl: STREAMS_REPO_URL },
-	sys: { repoUrl: SYS_REPO_URL },
-	"sys/atomic": { repoUrl: SYS_REPO_URL, subdir: "atomic" },
-	"sys/cgroup": { repoUrl: SYS_REPO_URL, subdir: "cgroup" },
-	"sys/crypto": { repoUrl: SYS_REPO_URL, subdir: "crypto" },
-	"sys/bytes": { repoUrl: SYS_REPO_URL, subdir: "bytes" },
-	"docker/convert": { repoUrl: DOCKER_REPO_URL, subdir: "convert" },
-	acfs: { repoUrl: ACFS_REPO_URL },
-	kit: { repoUrl: KIT_REPO_URL },
 };
 
 const GO_GET_RESPONSE_HEADERS = {
