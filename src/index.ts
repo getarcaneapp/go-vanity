@@ -24,6 +24,7 @@ const MODULES: Record<string, VanityModule> = {
 	"sys/bytes": { repoUrl: KIT_REPO_URL, subdir: "sys/bytes" },
 	"sys/cgroup": { repoUrl: KIT_REPO_URL, subdir: "sys/cgroup" },
 	"sys/crypto": { repoUrl: KIT_REPO_URL, subdir: "sys/crypto" },
+	docker: { repoUrl: KIT_REPO_URL, subdir: "docker" },
 	"docker/convert": { repoUrl: KIT_REPO_URL, subdir: "docker/convert" },
 	"docker/compat": { repoUrl: KIT_REPO_URL, subdir: "docker/compat" },
 
