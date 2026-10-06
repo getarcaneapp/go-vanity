@@ -28,7 +28,7 @@ const MODULES: Record<string, VanityModule> = {
 	"docker/convert": { repoUrl: KIT_REPO_URL, subdir: "docker/convert" },
 	"docker/compat": { repoUrl: KIT_REPO_URL, subdir: "docker/compat" },
 
-	// Remove eventually 
+	// Remove eventually
 	"sys/atomic": { repoUrl: SYS_REPO_URL, subdir: "atomic" },
 
 	arcane: { repoUrl: REPO_URL, subdir: "backend" },

@@ -3,7 +3,8 @@ import worker from "./index";
 
 const TEST_DOMAIN = "go.carr.sh";
 const ARCANE_REPO_URL = "https://github.com/getarcaneapp/arcane";
-const STREAMS_REPO_URL = "https://github.com/getarcaneapp/streams";
+const KIT_REPO_URL = "https://github.com/getarcaneapp/kit";
+const SYS_REPO_URL = "https://github.com/getarcaneapp/sys";
 
 interface TestModule {
 	repoUrl: string;
@@ -11,9 +12,20 @@ interface TestModule {
 }
 
 const MODULES: Record<string, TestModule> = {
+	kit: { repoUrl: KIT_REPO_URL },
+	acfs: { repoUrl: KIT_REPO_URL, subdir: "acfs" },
+	builds: { repoUrl: KIT_REPO_URL, subdir: "builds" },
+	updater: { repoUrl: KIT_REPO_URL, subdir: "updater" },
+	streams: { repoUrl: KIT_REPO_URL, subdir: "streams" },
+	"sys/bytes": { repoUrl: KIT_REPO_URL, subdir: "sys/bytes" },
+	"sys/cgroup": { repoUrl: KIT_REPO_URL, subdir: "sys/cgroup" },
+	"sys/crypto": { repoUrl: KIT_REPO_URL, subdir: "sys/crypto" },
+	docker: { repoUrl: KIT_REPO_URL, subdir: "docker" },
+	"docker/convert": { repoUrl: KIT_REPO_URL, subdir: "docker/convert" },
+	"docker/compat": { repoUrl: KIT_REPO_URL, subdir: "docker/compat" },
+	"sys/atomic": { repoUrl: SYS_REPO_URL, subdir: "atomic" },
 	arcane: { repoUrl: ARCANE_REPO_URL, subdir: "backend" },
 	cli: { repoUrl: ARCANE_REPO_URL, subdir: "cli" },
-	streams: { repoUrl: STREAMS_REPO_URL },
 	types: { repoUrl: ARCANE_REPO_URL, subdir: "types" },
 };
 
